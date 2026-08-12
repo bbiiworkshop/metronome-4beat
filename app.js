@@ -201,7 +201,7 @@ document.querySelectorAll(".style").forEach(function(btn) {
     btn.classList.add("selected");
     style = btn.dataset.style;
     const names = { click: "一般節拍器", digital: "電子", drum: "真鼓", bell: "鈴鐺" };
-    $('styleStatus').textContent = "目前音色：" + names[style] + "。特殊音使用特殊提示聲。";
+    
     if (playing) {
       hit(isAccent(beat));
     } else {
