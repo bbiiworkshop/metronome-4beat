@@ -182,10 +182,8 @@ document.querySelectorAll(".meterOpt").forEach(function(btn) {
 document.querySelectorAll(".accentOpt").forEach(function(btn) {
   btn.onclick = function() {
     document.querySelectorAll(".accentOpt").forEach(function(x) {
-      x.setAttribute("aria-checked", "false");
       x.classList.remove("selected");
     });
-    btn.setAttribute("aria-checked", "true");
     btn.classList.add("selected");
     accentPattern = btn.dataset.accent;
     var accentDesc = accentPattern === "1" ? "提示音在第一拍" : accentPattern === "1,3" ? "提示音在1,3拍" : "提示音在2,4拍";
@@ -201,10 +199,8 @@ document.querySelectorAll(".accentOpt").forEach(function(btn) {
 document.querySelectorAll(".style").forEach(function(btn) {
   btn.onclick = function() {
     document.querySelectorAll(".style").forEach(function(x) {
-      x.setAttribute("aria-checked", "false");
       x.classList.remove("selected");
     });
-    btn.setAttribute("aria-checked", "true");
     btn.classList.add("selected");
     style = btn.dataset.style;
     const names = { click: "一般節拍器", digital: "電子", drum: "真鼓", bell: "鈴鐺" };
