@@ -106,7 +106,7 @@ function start() {
   playing = true;
   beat = 0;
   const btn = $("playBtn");
-  btn.textContent = "■ 停止播放";
+  btn.textContent = "停止播放";
   btn.classList.add("playing");
   tick();
   timer = setInterval(tick, 60000 / bpm);
@@ -117,7 +117,7 @@ function stop() {
   clearInterval(timer);
   timer = null;
   const btn = $("playBtn");
-  btn.textContent = "▶ 開始播放";
+  btn.textContent = "開始節拍器";
   btn.classList.remove("playing");
 }
 
@@ -168,7 +168,7 @@ document.querySelectorAll(".meterOpt").forEach(function(btn) {
       beat = 0;
       playing = true;
       var btn2 = $("playBtn");
-      btn2.textContent = "■ 停止播放";
+      btn2.textContent = "停止播放";
       btn2.classList.add("playing");
       tick();
       timer = setInterval(tick, 60000 / bpm);
