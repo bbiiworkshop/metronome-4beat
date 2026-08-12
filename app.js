@@ -1,7 +1,6 @@
 let bpm = 120, playing = false, timer = null, beat = 0, audio = null, style = "click", beatsPerBar = 4, accentPattern = "1";
 const $ = id => document.getElementById(id);
 
-function announce(t) { $("status").textContent = t; }
 
 function ctx() {
   if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
@@ -163,7 +162,6 @@ document.querySelectorAll(".meterOpt").forEach(function(btn) {
       accentPattern = "1";
     }
     var accentDesc = (beatsPerBar === 4) ? ("，特殊音在" + (accentPattern === "1" ? "第一拍" : accentPattern === "1,3" ? "第1.3拍" : "第2.4拍")) : "";
-    announce("已選擇" + names2[beatsPerBar] + "拍" + accentDesc + "。");
 
     // 如果原本在播放，重新啟動
     if (wasPlaying) {
@@ -187,7 +185,6 @@ document.querySelectorAll(".accentOpt").forEach(function(btn) {
     btn.classList.add("selected");
     accentPattern = btn.dataset.accent;
     var accentDesc = accentPattern === "1" ? "提示音在第一拍" : accentPattern === "1,3" ? "提示音在1,3拍" : "提示音在2,4拍";
-    announce(accentDesc + "。");
     if (playing) {
       hit(isAccent(beat));
       flash(beat);
@@ -205,7 +202,6 @@ document.querySelectorAll(".style").forEach(function(btn) {
     style = btn.dataset.style;
     const names = { click: "一般節拍器", digital: "電子", drum: "真鼓", bell: "鈴鐺" };
     $('styleStatus').textContent = "目前音色：" + names[style] + "。特殊音使用特殊提示聲。";
-    announce("已選擇" + names[style] + "節拍音色。特殊音使用特殊提示聲。");
     if (playing) {
       hit(isAccent(beat));
     } else {
@@ -218,28 +214,23 @@ document.querySelectorAll(".style").forEach(function(btn) {
 $("voice").onclick = function() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
-    announce("此瀏覽器不支援語音辨識，請使用 Android Chrome。");
     return;
   }
   const r = new SR();
   r.lang = "zh-TW";
   r.interimResults = false;
   r.maxAlternatives = 3;
-  announce("正在聆聽。請說出 BPM，例如一百二十 BPM。");
   r.onresult = function(e) {
     const text = e.results[0][0].transcript;
     const n = parseNumber(text);
     if (n) {
       bpm = Math.max(30, Math.min(240, Math.round(n)));
       $("bpm").textContent = bpm + " BPM";
-      announce("已辨識：" + text + "。目前速度 " + bpm + " BPM。");
       if (playing) { stop(); start(); }
     } else {
-      announce("聽到：" + text + "。沒有辨識出有效的 BPM，請再說一次。");
     }
   };
   r.onerror = function() {
-    announce("語音辨識失敗，請再試一次。");
   };
   r.start();
 };
