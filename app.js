@@ -188,7 +188,7 @@ document.querySelectorAll(".accentOpt").forEach(function(btn) {
     btn.setAttribute("aria-checked", "true");
     btn.classList.add("selected");
     accentPattern = btn.dataset.accent;
-    var accentDesc = "特殊音在" + (accentPattern === "1" ? "第一拍" : accentPattern === "1,3" ? "第1.3拍" : "第2.4拍");
+    var accentDesc = accentPattern === "1" ? "提示音在第一拍" : accentPattern === "1,3" ? "提示音在1,3拍" : "提示音在2,4拍";
     announce(accentDesc + "。");
     if (playing) {
       hit(isAccent(beat));
