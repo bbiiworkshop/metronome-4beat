@@ -148,7 +148,8 @@ $("meterBtn").onclick = function() {
 };
 document.querySelectorAll(".meterOpt").forEach(function(btn) {
   btn.onclick = function() {
-    if (playing) stop();
+    var wasPlaying = playing;
+    if (playing) { clearInterval(timer); timer = null; playing = false; }
     document.querySelectorAll(".meterOpt").forEach(function(x) { x.classList.remove("selected"); });
     btn.classList.add("selected");
     beatsPerBar = parseInt(btn.dataset.beats);
@@ -170,6 +171,18 @@ document.querySelectorAll(".meterOpt").forEach(function(btn) {
     }
     var accentDesc = (beatsPerBar === 4) ? ("，特殊音在" + (accentPattern === "1" ? "第一拍" : accentPattern === "1,3" ? "第1.3拍" : "第2.4拍")) : "";
     announce("已選擇" + names2[beatsPerBar] + "拍" + accentDesc + "。");
+
+    // 如果原本在播放，重新啟動
+    if (wasPlaying) {
+      beat = 0;
+      playing = true;
+      var btn2 = $("playBtn");
+      btn2.textContent = "■ 停止播放";
+      btn2.setAttribute("aria-label", "停止播放");
+      btn2.classList.add("playing");
+      tick();
+      timer = setInterval(tick, 60000 / bpm);
+    }
   };
 });
 
@@ -185,7 +198,10 @@ document.querySelectorAll(".accentOpt").forEach(function(btn) {
     accentPattern = btn.dataset.accent;
     var accentDesc = "特殊音在" + (accentPattern === "1" ? "第一拍" : accentPattern === "1,3" ? "第1.3拍" : "第2.4拍");
     announce(accentDesc + "。");
-    if (playing) { flash(beat); }
+    if (playing) {
+      hit(isAccent(beat));
+      flash(beat);
+    }
   };
 });
 
@@ -200,9 +216,13 @@ document.querySelectorAll(".style").forEach(function(btn) {
     btn.classList.add("selected");
     style = btn.dataset.style;
     const names = { click: "一般節拍器", digital: "電子", drum: "真鼓", bell: "鈴鐺" };
-    $("styleStatus").textContent = "目前音色：" + names[style] + "。特殊音使用特殊提示聲。";
+    $('styleStatus').textContent = "目前音色：" + names[style] + "。特殊音使用特殊提示聲。";
     announce("已選擇" + names[style] + "節拍音色。特殊音使用特殊提示聲。");
-    hit(true);
+    if (playing) {
+      hit(isAccent(beat));
+    } else {
+      hit(true);
+    }
   };
 });
 
