@@ -76,7 +76,7 @@ function renderBeats() {
   container.innerHTML = html;
 
   const meterNames = { 2: "2/4", 3: "3/4", 4: "4/4", 5: "5/8", 6: "6/8" };
-  $("beatStatus").textContent = meterNames[beatsPerBar] + " 拍。尚未開始。";
+  
 }
 
 function flash(i) {
@@ -92,7 +92,7 @@ function flash(i) {
   const m = labels2[beatsPerBar] || labels2[4];
   const mparts = m.split("|");
   const beatLabel = mparts[i] ? "(" + mparts[i] + "拍)" : "";
-  $("beatStatus").textContent = "目前第 " + (i + 1) + " 拍 " + beatLabel + "。" + (isAccent(i) ? "這是特殊音。" : "這是一般拍。");
+  
 }
 
 function tick() {
