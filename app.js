@@ -108,10 +108,7 @@ function start() {
   beat = 0;
   const btn = $("playBtn");
   btn.textContent = "■ 停止播放";
-  btn.setAttribute("aria-label", "停止播放");
   btn.classList.add("playing");
-  const accentDesc = (beatsPerBar === 4) ? ("，特殊音在" + (accentPattern === "1" ? "第一拍" : accentPattern === "1,3" ? "第1.3拍" : "第2.4拍")) : "";
-  announce("節拍器已開始，" + bpm + " BPM，" + beatsPerBar + "拍" + accentDesc + "。");
   tick();
   timer = setInterval(tick, 60000 / bpm);
 }
@@ -122,10 +119,7 @@ function stop() {
   timer = null;
   const btn = $("playBtn");
   btn.textContent = "▶ 開始播放";
-  btn.setAttribute("aria-label", "開始節拍器");
   btn.classList.remove("playing");
-  const accentDesc2 = (beatsPerBar === 4) ? ("，特殊音在" + (accentPattern === "1" ? "第一拍" : accentPattern === "1,3" ? "第1.3拍" : "第2.4拍")) : "";
-  announce("節拍器已停止，目前 " + bpm + " BPM，" + beatsPerBar + "拍" + accentDesc2 + "。");
 }
 
 // 播放按鈕
@@ -156,7 +150,6 @@ document.querySelectorAll(".meterOpt").forEach(function(btn) {
     renderBeats();
     var names2 = { 2: "2/4", 3: "3/4", 4: "4/4", 5: "5/8", 6: "6/8" };
     $("meterBtn").textContent = names2[beatsPerBar] + " 拍 ▾";
-    $("meterBtn").setAttribute("aria-label", names2[beatsPerBar] + " 拍");
     meterMenuVisible = false;
     $("meterMenu").style.display = "none";
     $("meterBtn").setAttribute("aria-expanded", "false");
@@ -178,7 +171,6 @@ document.querySelectorAll(".meterOpt").forEach(function(btn) {
       playing = true;
       var btn2 = $("playBtn");
       btn2.textContent = "■ 停止播放";
-      btn2.setAttribute("aria-label", "停止播放");
       btn2.classList.add("playing");
       tick();
       timer = setInterval(tick, 60000 / bpm);
