@@ -1,0 +1,56 @@
+<!doctype html><html lang="zh-Hant"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111"><title>BBiiWMS 四拍節拍器</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="style.css">
+</head><body><main>
+<header><div class="brand">BBiiworkshop</div><h1>視障語音節拍器</h1></header>
+
+<section class="card">
+<h2>目前速度</h2>
+<div id="bpm" class="bpm" role="status" aria-live="polite" aria-atomic="true">120 BPM</div>
+<button id="voice" class="gold" type="button" aria-label="語音輸入 BPM">🎙️ 語音輸入 BPM</button>
+<button id="playBtn" class="playBtn" type="button" aria-label="開始節拍器">▶ 開始節拍器</button>
+<div id="status" class="status" role="status" aria-live="polite" aria-atomic="true">請按語音輸入 BPM，例如說「一百二十 BPM」。</div>
+</section>
+
+<section class="card">
+<h2>選擇節拍音色</h2>
+<div class="styles" role="radiogroup" aria-label="四種節拍音色">
+<button class="style selected" data-style="click" role="radio" aria-checked="true" aria-label="一般節拍器，第一拍較高音">🔊 節拍器</button>
+<button class="style" data-style="digital" role="radio" aria-checked="false" aria-label="電子節拍，第一拍較高音">📟 電子</button>
+<button class="style" data-style="drum" role="radio" aria-checked="false" aria-label="真鼓節拍，第一拍為大鼓">🥁 真鼓</button>
+<button class="style" data-style="bell" role="radio" aria-checked="false" aria-label="鈴鐺節拍，第一拍較高音">🔔 鈴鐺</button>
+</div>
+<div id="styleStatus" class="status" role="status" aria-live="polite">目前音色：鈴鐺。第一拍與其他三拍不同。</div>
+</section>
+
+<section class="card">
+<h2>選擇拍號</h2>
+<button id="meterBtn" class="meterBtn" type="button" aria-label="選擇拍號">4/4 拍 ▾</button>
+<div id="meterMenu" class="meterMenu" style="display:none;">
+<button class="meterOpt" data-beats="2" aria-label="2/4 拍">2/4</button>
+<button class="meterOpt" data-beats="3" aria-label="3/4 拍">3/4</button>
+<button class="meterOpt selected" data-beats="4" aria-label="4/4 拍">4/4</button>
+<button class="meterOpt" data-beats="5" aria-label="5/8 拍">5/8</button>
+<button class="meterOpt" data-beats="6" aria-label="6/8 拍">6/8</button>
+</div>
+<div id="accentSection" class="accentSection">
+<h3>特殊音位置</h3>
+<div class="accentOpts" role="radiogroup" aria-label="特殊音位置">
+<button class="accentOpt selected" data-accent="1" role="radio" aria-checked="true">第 1 拍</button>
+<button class="accentOpt" data-accent="1,3" role="radio" aria-checked="false">第 1.3 拍</button>
+<button class="accentOpt" data-accent="2,4" role="radio" aria-checked="false">第 2.4 拍</button>
+</div>
+</div>
+</section>
+
+<section class="card">
+<h2>節拍顯示</h2>
+<div id="beatsContainer" class="beats" role="group" aria-label="節奏">
+<div id="b0" class="beat">1</div><div id="b1" class="beat">2</div><div id="b2" class="beat">3</div><div id="b3" class="beat">4</div>
+</div>
+<div id="beatStatus" class="status" role="status" aria-live="polite" aria-atomic="true">尚未開始。特殊音使用特殊提示聲。</div>
+</section>
+
+<section class="card"><h2>操作說明</h2><p>使用 TalkBack 左右滑動。按語音輸入後說出 BPM。選擇拍號（2/4、3/4、4/4、5/8、6/8）。選擇四種節拍音色之一。第一拍一定使用特殊的提示聲。</p></section>
+</main><script src="app.js"></script></body></html>
