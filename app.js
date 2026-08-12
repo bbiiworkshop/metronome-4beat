@@ -117,7 +117,7 @@ function stop() {
   clearInterval(timer);
   timer = null;
   const btn = $("playBtn");
-  btn.textContent = "開始節拍器";
+  btn.textContent = "開始播放";
   btn.classList.remove("playing");
 }
 
@@ -193,22 +193,10 @@ document.querySelectorAll(".accentOpt").forEach(function(btn) {
 });
 
 // 音色選擇
-document.querySelectorAll(".style").forEach(function(btn) {
-  btn.onclick = function() {
-    document.querySelectorAll(".style").forEach(function(x) {
-      x.classList.remove("selected");
-    });
-    btn.classList.add("selected");
-    style = btn.dataset.style;
-    const names = { click: "一般節拍器", digital: "電子", drum: "真鼓", bell: "鈴鐺" };
-    
-    if (playing) {
-      hit(isAccent(beat));
-    } else {
-      hit(true);
-    }
-  };
-});
+$("soundSelect").onchange = function() {
+  style = this.value;
+  if (!playing) { hit(true); }
+};
 
 // 語音輸入
 $("voice").onclick = function() {

@@ -9,17 +9,16 @@
 <p class="section-title">目前速度</p>
 <div id="bpm" class="bpm" role="status" aria-live="polite" aria-atomic="true">120 BPM</div>
 <button id="voice" class="gold" type="button"><span aria-hidden="true">🎙️</span> 語音輸入 BPM</button>
-<button id="playBtn" class="playBtn" type="button">開始節拍器</button>
+<button id="playBtn" class="playBtn" type="button">開始播放</button>
 </section>
 
 <section class="card">
-<p class="section-title">節拍音色</p>
-<div class="styles">
-<button class="style selected" data-style="click"><span aria-hidden="true">🔊</span> 節拍器</button>
-<button class="style" data-style="digital"><span aria-hidden="true">📟</span> 電子樂</button>
-<button class="style" data-style="drum"><span aria-hidden="true">🥁</span> 爵士鼓</button>
-<button class="style" data-style="bell"><span aria-hidden="true">🔔</span> 鈴鐺</button>
-</div>
+<p class="section-title">音色選擇</p>
+<select id="soundSelect" style="width:100%;min-height:48px;font-size:18px;font-weight:700;border:2px solid #555;border-radius:10px;background:#292929;color:#fff;padding:10px 12px;">
+<option value="click">音色一（節拍器）</option>
+<option value="bell">音色二（鈴鐺）</option>
+<option value="drum">音色三（爵士鼓）</option>
+</select>
 </section>
 
 <section class="card">
