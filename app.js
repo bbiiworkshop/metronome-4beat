@@ -46,21 +46,21 @@ function isAccent(beatIdx) {
 
 function hit(accent) {
   if (style === "bell") {
-    osc(accent ? 880 : 620, "sine", 0.42, accent ? 0.83 : 0.57);
-    osc(accent ? 1320 : 930, "sine", 0.28, accent ? 0.27 : 0.18);
+    osc(accent ? 880 : 620, "sine", 0.42, accent ? 1.0 : 0.75);
+    osc(accent ? 1320 : 930, "sine", 0.28, accent ? 0.35 : 0.25);
   } else if (style === "digital") {
-    osc(accent ? 1200 : 800, "square", 0.07, accent ? 0.48 : 0.33);
-    osc(accent ? 1600 : 1000, "square", 0.035, accent ? 0.18 : 0.12);
+    osc(accent ? 1200 : 800, "square", 0.07, accent ? 0.65 : 0.45);
+    osc(accent ? 1600 : 1000, "square", 0.035, accent ? 0.25 : 0.15);
   } else if (style === "drum") {
     if (accent) {
       osc(145, "sine", 0.20, 1.0);
-      osc(65, "sine", 0.28, 0.83);
+      osc(65, "sine", 0.28, 1.0);
     } else {
-      osc(190, "triangle", 0.08, 0.53);
-      noise(0.10, 0.27);
+      osc(190, "triangle", 0.08, 0.7);
+      noise(0.10, 0.35);
     }
   } else {
-    osc(accent ? 1250 : 900, "square", 0.06, accent ? 0.51 : 0.38);
+    osc(accent ? 1250 : 900, "square", 0.06, accent ? 0.65 : 0.5);
   }
 }
 
