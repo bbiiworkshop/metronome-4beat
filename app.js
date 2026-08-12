@@ -1,6 +1,5 @@
-let bpm = 120, playing = false, timer = null, beat = 0, audio = null, style = "click", beatsPerBar = 4, accentPattern = "1";
+let bpm = 120, playing = false, timer = null, beat = 0, audio = null, style = "click", beatsPerBar = 4;
 const $ = id => document.getElementById(id);
-
 
 function ctx() {
   if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
@@ -38,8 +37,6 @@ function noise(dur, vol, delay) {
 }
 
 function isAccent(beatIdx) {
-  if (accentPattern === "1,3") return beatIdx === 0 || beatIdx === 2;
-  if (accentPattern === "2,4") return beatIdx === 1 || beatIdx === 3;
   return beatIdx === 0;
 }
 
@@ -47,9 +44,6 @@ function hit(accent) {
   if (style === "bell") {
     osc(accent ? 880 : 620, "sine", 0.42, accent ? 1.0 : 0.75);
     osc(accent ? 1320 : 930, "sine", 0.28, accent ? 0.35 : 0.25);
-  } else if (style === "digital") {
-    osc(accent ? 1200 : 800, "square", 0.07, accent ? 0.65 : 0.45);
-    osc(accent ? 1600 : 1000, "square", 0.035, accent ? 0.25 : 0.15);
   } else if (style === "drum") {
     if (accent) {
       osc(145, "sine", 0.20, 1.0);
@@ -65,7 +59,7 @@ function hit(accent) {
 
 function renderBeats() {
   const container = $("beatsContainer");
-  const labels = { 2: "1|2", 3: "1|2|3", 4: "1|2|3|4", 5: "1|2|3|4|5", 6: "1|2|3|4|5|6" };
+  const labels = { 2: "1|2", 3: "1|2|3", 4: "1|2|3|4", 6: "1|2|3|4|5|6" };
   const parts = (labels[beatsPerBar] || "1|2|3|4").split("|");
   let html = "";
   for (let i = 0; i < parts.length; i++) {
@@ -73,9 +67,6 @@ function renderBeats() {
     html += '<div id="b' + i + '" class="' + cls + '">' + parts[i] + '</div>';
   }
   container.innerHTML = html;
-
-  const meterNames = { 2: "2/4", 3: "3/4", 4: "4/4", 5: "5/8", 6: "6/8" };
-  
 }
 
 function flash(i) {
@@ -86,12 +77,6 @@ function flash(i) {
     b.classList.add("active");
     if (isAccent(i)) b.classList.add("accent");
   }
-
-  const labels2 = { 2: "強|弱", 3: "強|弱|弱", 4: "強|弱|強|弱", 5: "強|弱|弱|弱|弱", 6: "強|弱|弱|強|弱|弱" };
-  const m = labels2[beatsPerBar] || labels2[4];
-  const mparts = m.split("|");
-  const beatLabel = mparts[i] ? "(" + mparts[i] + "拍)" : "";
-  
 }
 
 function tick() {
@@ -121,76 +106,16 @@ function stop() {
   btn.classList.remove("playing");
 }
 
-// 播放按鈕
 $("playBtn").onclick = function() {
   if (playing) { stop(); } else { start(); }
 };
 
-// 拍號下拉選單
-var meterMenuVisible = false;
-$("meterBtn").onclick = function() {
-  meterMenuVisible = !meterMenuVisible;
-  var menu = $("meterMenu");
-  if (meterMenuVisible) {
-    menu.style.display = "block";
-    this.setAttribute("aria-expanded", "true");
-  } else {
-    menu.style.display = "none";
-    this.setAttribute("aria-expanded", "false");
-  }
+// 拍號選擇
+$("meterSelect").onchange = function() {
+  beatsPerBar = parseInt(this.value);
+  renderBeats();
+  if (playing) { stop(); start(); }
 };
-document.querySelectorAll(".meterOpt").forEach(function(btn) {
-  btn.onclick = function() {
-    var wasPlaying = playing;
-    if (playing) { clearInterval(timer); timer = null; playing = false; }
-    document.querySelectorAll(".meterOpt").forEach(function(x) { x.classList.remove("selected"); });
-    btn.classList.add("selected");
-    beatsPerBar = parseInt(btn.dataset.beats);
-    renderBeats();
-    var names2 = { 2: "2/4", 3: "3/4", 4: "4/4", 5: "5/8", 6: "6/8" };
-    $("meterBtn").textContent = names2[beatsPerBar] + " 拍 ▾";
-    meterMenuVisible = false;
-    $("meterMenu").style.display = "none";
-    $("meterBtn").setAttribute("aria-expanded", "false");
-
-    // 4/4 顯示特殊音選項，其他隱藏
-    var accentSection = $("accentSection");
-    if (beatsPerBar === 4) {
-      accentSection.style.display = "block";
-    } else {
-      accentSection.style.display = "none";
-      accentPattern = "1";
-    }
-    var accentDesc = (beatsPerBar === 4) ? ("，特殊音在" + (accentPattern === "1" ? "第一拍" : accentPattern === "1,3" ? "第1.3拍" : "第2.4拍")) : "";
-
-    // 如果原本在播放，重新啟動
-    if (wasPlaying) {
-      beat = 0;
-      playing = true;
-      var btn2 = $("playBtn");
-      btn2.textContent = "停止播放";
-      btn2.classList.add("playing");
-      tick();
-      timer = setInterval(tick, 60000 / bpm);
-    }
-  };
-});
-
-// 特殊音位置選項
-document.querySelectorAll(".accentOpt").forEach(function(btn) {
-  btn.onclick = function() {
-    document.querySelectorAll(".accentOpt").forEach(function(x) {
-      x.classList.remove("selected");
-    });
-    btn.classList.add("selected");
-    accentPattern = btn.dataset.accent;
-    var accentDesc = accentPattern === "1" ? "提示音在第一拍" : accentPattern === "1,3" ? "提示音在1,3拍" : "提示音在2,4拍";
-    if (playing) {
-      hit(isAccent(beat));
-      flash(beat);
-    }
-  };
-});
 
 // 音色選擇
 $("soundSelect").onchange = function() {
@@ -201,9 +126,7 @@ $("soundSelect").onchange = function() {
 // 語音輸入
 $("voice").onclick = function() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    return;
-  }
+  if (!SR) { return; }
   const r = new SR();
   r.lang = "zh-TW";
   r.interimResults = false;
@@ -215,11 +138,9 @@ $("voice").onclick = function() {
       bpm = Math.max(30, Math.min(240, Math.round(n)));
       $("bpm").textContent = bpm + " BPM";
       if (playing) { stop(); start(); }
-    } else {
     }
   };
-  r.onerror = function() {
-  };
+  r.onerror = function() {};
   r.start();
 };
 
@@ -238,6 +159,4 @@ function parseNumber(s) {
   return found ? total : null;
 }
 
-// 初始化
 renderBeats();
-$("accentSection").style.display = "block";
