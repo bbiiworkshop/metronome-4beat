@@ -165,7 +165,10 @@ document.addEventListener("click", function() {
 // 語音輸入
 $("voice").onclick = function() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { return; }
+  if (!SR) {
+    $("bpm").textContent = "此瀏覽器不支援語音輸入";
+    return;
+  }
   const r = new SR();
   r.lang = "zh-TW";
   r.interimResults = false;
@@ -182,6 +185,15 @@ $("voice").onclick = function() {
   r.onerror = function() {};
   r.start();
 };
+
+// BPM 增減按鈕（語音輸入不可用時的替代）
+function changeBpm(delta) {
+  bpm = Math.max(30, Math.min(240, bpm + delta));
+  $("bpm").textContent = bpm + " BPM";
+  if (playing) { stop(); start(); }
+}
+$("bpmDown").onclick = function() { changeBpm(-5); };
+$("bpmUp").onclick = function() { changeBpm(5); };
 
 function parseNumber(s) {
   const m = s.match(/\d{2,3}/);
