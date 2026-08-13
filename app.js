@@ -146,12 +146,17 @@ function setupDropdown(btnId, menuId, onSelect) {
 setupDropdown("soundBtn", "soundMenu", function(val) {
   style = val;
   if (!playing) { hit(true); }
+  const labels = { click: "音色一", bell: "音色二", drum: "音色三" };
+  const opt = document.querySelector('#soundMenu .dropOpt[data-value="' + val + '"]');
+  if (opt) $("soundBtn").textContent = "音色選擇：" + (labels[val] || opt.textContent);
 });
 
 setupDropdown("meterBtn", "meterMenu", function(val) {
   beatsPerBar = parseInt(val);
   renderBeats();
   if (playing) { stop(); start(); }
+  const opt = document.querySelector('#meterMenu .dropOpt[data-value="' + val + '"]');
+  if (opt) $("meterBtn").textContent = "拍號選擇：" + opt.textContent;
 });
 
 // 點外面關閉下拉
