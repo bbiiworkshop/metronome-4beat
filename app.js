@@ -110,18 +110,57 @@ $("playBtn").onclick = function() {
   if (playing) { stop(); } else { start(); }
 };
 
-// 拍號選擇
-$("meterSelect").onchange = function() {
-  beatsPerBar = parseInt(this.value);
+// 下拉選單：音色
+function setupDropdown(btnId, menuId, onSelect) {
+  const btn = $(btnId), menu = $(menuId);
+  btn.onclick = function(e) {
+    e.stopPropagation();
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    // 關閉所有下拉
+    document.querySelectorAll(".dropMenu").forEach(m => m.style.display = "none");
+    document.querySelectorAll(".dropBtn").forEach(b => b.setAttribute("aria-expanded", "false"));
+    if (!expanded) {
+      menu.style.display = "flex";
+      btn.setAttribute("aria-expanded", "true");
+    }
+  };
+  menu.querySelectorAll(".dropOpt").forEach(function(opt) {
+    opt.onclick = function(e) {
+      e.stopPropagation();
+      const val = opt.getAttribute("data-value");
+      // 更新選項狀態
+      menu.querySelectorAll(".dropOpt").forEach(function(o) {
+        o.classList.remove("selected");
+        o.setAttribute("aria-checked", "false");
+      });
+      opt.classList.add("selected");
+      opt.setAttribute("aria-checked", "true");
+      btn.textContent = opt.textContent;
+      menu.style.display = "none";
+      btn.setAttribute("aria-expanded", "false");
+      onSelect(val);
+    };
+  });
+}
+
+setupDropdown("soundBtn", "soundMenu", function(val) {
+  style = val;
+  if (!playing) { hit(true); }
+});
+
+setupDropdown("meterBtn", "meterMenu", function(val) {
+  beatsPerBar = parseInt(val);
   renderBeats();
   if (playing) { stop(); start(); }
-};
+});
 
-// 音色選擇
-$("soundSelect").onchange = function() {
-  style = this.value;
-  if (!playing) { hit(true); }
-};
+// 點外面關閉下拉
+document.addEventListener("click", function() {
+  document.querySelectorAll(".dropMenu").forEach(m => m.style.display = "none");
+  document.querySelectorAll(".dropBtn").forEach(b => b.setAttribute("aria-expanded", "false"));
+});
+
+
 
 // 語音輸入
 $("voice").onclick = function() {

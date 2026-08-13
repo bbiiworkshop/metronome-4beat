@@ -1,9 +1,11 @@
-<!doctype html><html lang="zh-Hant"><head>
+<!doctype html>
+<html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#111"><title>BBiiWMS 四拍節拍器</title>
 <link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="style.css">
 </head><body><div>
-<header><div class="brand">BBiiworkshop</div><h1>視障語音節拍器</h1></header>
+
+<header><div class="brand">BBiiworkshop</div><span>視障語音節拍器</span></header>
 
 <section class="card">
 <div id="bpm" class="bpm" role="status" aria-live="polite" aria-atomic="true">120 BPM</div>
@@ -13,31 +15,32 @@
 
 <section class="card">
 <p class="section-title">音色選擇</p>
-<select id="soundSelect" style="width:100%;min-height:48px;font-size:18px;font-weight:700;border:2px solid #555;border-radius:10px;background:#292929;color:#fff;padding:10px 12px;">
-<option value="click">音色一</option>
-<option value="bell">音色二</option>
-<option value="drum">音色三</option>
-</select>
+<div class="dropdown">
+<button id="soundBtn" class="dropBtn" type="button" aria-haspopup="listbox" aria-expanded="false">音色一</button>
+<div id="soundMenu" class="dropMenu" role="listbox">
+<button class="dropOpt selected" data-value="click" role="option" aria-checked="true">音色一</button>
+<button class="dropOpt" data-value="bell" role="option" aria-checked="false">音色二</button>
+<button class="dropOpt" data-value="drum" role="option" aria-checked="false">音色三</button>
+</div>
+</div>
 </section>
 
 <section class="card">
 <p class="section-title">拍號選擇</p>
-<select id="meterSelect" style="width:100%;min-height:48px;font-size:18px;font-weight:700;border:2px solid #555;border-radius:10px;background:#292929;color:#fff;padding:10px 12px;">
-<option value="2">2/4</option>
-<option value="3">3/4</option>
-<option value="4" selected>4/4</option>
-<option value="6">6/8</option>
-</select>
+<div class="dropdown">
+<button id="meterBtn" class="dropBtn" type="button" aria-haspopup="listbox" aria-expanded="false">4/4</button>
+<div id="meterMenu" class="dropMenu" role="listbox">
+<button class="dropOpt" data-value="2" role="option" aria-checked="false">2/4</button>
+<button class="dropOpt" data-value="3" role="option" aria-checked="false">3/4</button>
+<button class="dropOpt selected" data-value="4" role="option" aria-checked="true">4/4</button>
+<button class="dropOpt" data-value="6" role="option" aria-checked="false">6/8</button>
+</div>
+</div>
 </section>
 
 <section class="card">
 <p class="section-title">節拍顯示</p>
-<div id="beatsContainer" class="beats" role="group" aria-label="節奏">
-<div id="b0" class="beat">1</div><div id="b1" class="beat">2</div><div id="b2" class="beat">3</div><div id="b3" class="beat">4</div>
-</div>
-
+<div id="beatsContainer" class="beats" role="group" aria-label="節奏"></div>
 </section>
 
-<section class="card">
-<p class="section-title">操作說明</p><p>使用 TalkBack 左右滑動。按語音輸入後說出 BPM。選擇拍號與音色。開始播放。</p></section>
 </div><script src="app.js"></script></body></html>
