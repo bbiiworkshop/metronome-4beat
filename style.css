@@ -4,6 +4,6 @@
 .dropBtn{width:100%;min-height:56px;font-size:20px;font-weight:800;border:2px solid #555;border-radius:13px;background:#292929;color:#d6b36a;padding:10px 16px;text-align:left}
 .dropBtn::after{content:" ▼";float:right;font-size:14px}
 .dropBtn[aria-expanded="true"]::after{content:" ▲"}
-.dropMenu{display:none;flex-direction:column;gap:8px;margin-top:10px}
-.dropOpt{min-height:52px;font-size:18px;font-weight:700;border:2px solid #444;border-radius:10px;background:#252525;color:#888;text-align:left;padding:10px 16px}
+.dropOpt{display:block;width:100%;min-height:52px;font-size:18px;font-weight:700;border:2px solid #444;border-radius:10px;background:#252525;color:#888;text-align:left;padding:10px 16px}
 .dropOpt.selected,.dropOpt:hover{background:#d6b36a;color:#111;border-color:#d6b36a}
+.dropMenu{display:none;flex-direction:column;gap:8px;margin-top:10px;border:1px solid #555;border-radius:12px;padding:8px;background:#1c1c1c}
