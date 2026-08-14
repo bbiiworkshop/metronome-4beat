@@ -7,9 +7,9 @@ function ctx() {
   return audio;
 }
 
-function osc(freq, type, dur, vol, delay) {
-  if (delay === undefined) delay = 0;
-  const c = ctx(), n = c.currentTime + delay;
+function osc(freq, type, dur, vol, when) {
+  if (when === undefined) when = ctx().currentTime;
+  const c = ctx(), n = when;
   const o = c.createOscillator(), g = c.createGain();
   o.type = type;
   o.frequency.setValueAtTime(freq, n);
@@ -20,9 +20,9 @@ function osc(freq, type, dur, vol, delay) {
   o.stop(n + dur);
 }
 
-function noise(dur, vol, delay) {
-  if (delay === undefined) delay = 0;
-  const c = ctx(), n = c.currentTime + delay;
+function noise(dur, vol, when) {
+  if (when === undefined) when = ctx().currentTime;
+  const c = ctx(), n = when;
   const b = c.createBuffer(1, Math.floor(c.sampleRate * dur), c.sampleRate);
   const a = b.getChannelData(0);
   for (let i = 0; i < a.length; i++) a[i] = Math.random() * 2 - 1;
@@ -40,20 +40,20 @@ function isAccent(beatIdx) {
   return beatIdx === 0;
 }
 
-function hit(accent) {
+function hit(accent, when) {
   if (style === "bell") {
-    osc(accent ? 880 : 620, "sine", 0.42, accent ? 1.0 : 0.75);
-    osc(accent ? 1320 : 930, "sine", 0.28, accent ? 0.35 : 0.25);
+    osc(accent ? 880 : 620, "sine", 0.42, accent ? 1.0 : 0.75, when);
+    osc(accent ? 1320 : 930, "sine", 0.28, accent ? 0.35 : 0.25, when);
   } else if (style === "drum") {
     if (accent) {
-      osc(145, "sine", 0.20, 1.0);
-      osc(65, "sine", 0.28, 1.0);
+      osc(145, "sine", 0.20, 1.0, when);
+      osc(65, "sine", 0.28, 1.0, when);
     } else {
-      osc(190, "triangle", 0.08, 0.7);
-      noise(0.10, 0.35);
+      osc(190, "triangle", 0.08, 0.7, when);
+      noise(0.10, 0.35, when);
     }
   } else {
-    osc(accent ? 1250 : 900, "square", 0.06, accent ? 0.65 : 0.5);
+    osc(accent ? 1250 : 900, "square", 0.06, accent ? 0.65 : 0.5, when);
   }
 }
 
@@ -79,10 +79,23 @@ function flash(i) {
   }
 }
 
-function tick() {
-  hit(isAccent(beat));
-  flash(beat);
-  beat = (beat + 1) % beatsPerBar;
+let nextNoteTime = 0;
+const scheduleAheadTime = 0.12;
+const lookahead = 25;
+let schedulerTimer = null;
+
+function scheduler() {
+  const c = ctx();
+  while (nextNoteTime < c.currentTime + scheduleAheadTime) {
+    const t = nextNoteTime;
+    const b = beat;
+    hit(isAccent(b), t);
+    const delayMs = Math.max(0, (t - c.currentTime) * 1000);
+    setTimeout((function(beatNum) { return function() { flash(beatNum); }; })(b), delayMs);
+    nextNoteTime += 60.0 / bpm;
+    beat = (beat + 1) % beatsPerBar;
+  }
+  schedulerTimer = setTimeout(scheduler, lookahead);
 }
 
 function start() {
@@ -90,17 +103,17 @@ function start() {
   ctx();
   playing = true;
   beat = 0;
+  nextNoteTime = ctx().currentTime + 0.06;
   const btn = $("playBtn");
   btn.textContent = "停止播放";
   btn.classList.add("playing");
-  tick();
-  timer = setInterval(tick, 60000 / bpm);
+  scheduler();
 }
 
 function stop() {
   playing = false;
-  clearInterval(timer);
-  timer = null;
+  clearTimeout(schedulerTimer);
+  schedulerTimer = null;
   const btn = $("playBtn");
   btn.textContent = "開始播放";
   btn.classList.remove("playing");
@@ -184,7 +197,6 @@ $("voice").onclick = function() {
     if (n) {
       bpm = Math.max(30, Math.min(240, Math.round(n)));
       $("bpm").textContent = bpm + " BPM";
-      if (playing) { stop(); start(); }
     }
   };
   r.onerror = function() {};
@@ -195,7 +207,6 @@ $("voice").onclick = function() {
 function changeBpm(delta) {
   bpm = Math.max(30, Math.min(240, bpm + delta));
   $("bpm").textContent = bpm + " BPM";
-  if (playing) { stop(); start(); }
 }
 $("bpmDown").onclick = function() { changeBpm(-5); };
 $("bpmUp").onclick = function() { changeBpm(5); };

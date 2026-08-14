@@ -1,4 +1,4 @@
-const CACHE = 'metronome-4beat-v1';
+const CACHE = 'metronome-4beat-v2';
 const ASSETS = ['./', 'index.html', 'app.js', 'style.css', 'manifest.webmanifest'];
 
 self.addEventListener('install', event => {
