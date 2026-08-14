@@ -39,4 +39,11 @@
 <div id="beatsContainer" class="beats" role="group" aria-label="節奏"></div>
 </section>
 
-</div><script src="app.js"></script></body></html>
+</div><script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script></body></html>
