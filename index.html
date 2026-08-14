@@ -43,7 +43,16 @@
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js').catch(function () {});
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      reg.addEventListener('updatefound', function () {
+        const nw = reg.installing;
+        nw.addEventListener('statechange', function () {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            window.location.reload();
+          }
+        });
+      });
+    }).catch(function () {});
   });
 }
 </script></body></html>
